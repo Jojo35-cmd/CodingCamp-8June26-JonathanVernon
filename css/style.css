@@ -1,0 +1,471 @@
+/* ============================================================
+   Expense & Budget Visualizer — Main Stylesheet
+   css/style.css
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   CSS Custom Properties (Design Tokens)
+   ------------------------------------------------------------ */
+:root {
+  /* Primary / Accent colors */
+  --color-primary:        #4f46e5;   /* indigo — buttons, focus rings */
+  --color-primary-hover:  #4338ca;   /* darker indigo on hover */
+  --color-accent:         #06b6d4;   /* cyan accent */
+
+  /* Background colors */
+  --color-bg-app:         #f3f4f6;   /* overall page background */
+  --color-bg-card:        #ffffff;   /* card / section background */
+  --color-bg-input:       #f9fafb;   /* form field background */
+
+  /* Text colors */
+  --color-text-primary:   #111827;   /* headings, main content */
+  --color-text-secondary: #6b7280;   /* labels, meta text */
+  --color-text-muted:     #9ca3af;   /* placeholders, disabled */
+  --color-text-on-primary:#ffffff;   /* text on primary-colored surfaces */
+
+  /* Border & shadow */
+  --color-border:         #e5e7eb;
+  --color-border-focus:   #4f46e5;
+  --shadow-card:          0 1px 3px rgba(0, 0, 0, 0.10),
+                          0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-focus:         0 0 0 3px rgba(79, 70, 229, 0.25);
+  --border-radius:        0.5rem;    /* 8px */
+  --border-radius-sm:     0.25rem;   /* 4px */
+
+  /* Chart category colors (Req 6.3) */
+  --color-chart-food:      #FF6384;  /* Food */
+  --color-chart-transport: #36A2EB;  /* Transport */
+  --color-chart-fun:       #FFCE56;  /* Fun */
+
+  /* Validation / error colors (Req 6.3) */
+  --color-error:           #ef4444;  /* inline field error text */
+  --color-error-bg:        #fee2e2;  /* error banner background */
+  --color-error-border:    #fca5a5;  /* error banner border */
+  --color-error-text:      #991b1b;  /* error banner text */
+
+  /* Typography (Req 7.3, 7.4) */
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                       Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+  --font-size-base:   1rem;          /* 16px — minimum per Req 7.4 */
+  --font-size-sm:     0.875rem;      /* 14px */
+  --font-size-lg:     1.125rem;      /* 18px */
+  --font-size-xl:     1.25rem;       /* 20px */
+  --font-size-2xl:    1.5rem;        /* 24px */
+  --font-size-3xl:    1.875rem;      /* 30px */
+
+  --font-weight-normal:  400;
+  --font-weight-medium:  500;
+  --font-weight-semibold:600;
+  --font-weight-bold:    700;
+
+  --line-height-base:    1.5;
+  --line-height-tight:   1.25;
+
+  /* Spacing scale */
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+
+  /* Layout */
+  --max-width-app: 48rem;   /* 768px — center column */
+  --max-width-chart: 20rem; /* 320px — cap chart size */
+
+  /* Transitions */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* ============================================================
+   Styles for components (sections, forms, list, chart, etc.)
+   are added in tasks 2.2 – 2.6.
+   ============================================================ */
+
+/* ============================================================
+   Task 2.2 — Global reset, base styles, layout & card sections
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Global reset
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ------------------------------------------------------------
+   Base / body  (Req 7.3, 7.4)
+   ------------------------------------------------------------ */
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);   /* 1rem = 16px minimum */
+  line-height: var(--line-height-base);
+  background-color: var(--color-bg-app);
+  color: var(--color-text-primary);
+}
+
+/* ------------------------------------------------------------
+   Header
+   ------------------------------------------------------------ */
+header {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+header h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+/* ------------------------------------------------------------
+   Main layout — centered column with vertical gap
+   ------------------------------------------------------------ */
+main {
+  max-width: var(--max-width-app);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ------------------------------------------------------------
+   Section cards (Req 7.3, 7.4)
+   All four sections share this card appearance.
+   ------------------------------------------------------------ */
+#balance-section,
+#form-section,
+#list-section,
+#chart-section {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+}
+
+/* ------------------------------------------------------------
+   Section headings (h2)
+   ------------------------------------------------------------ */
+section h2 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+/* ------------------------------------------------------------
+   Balance display  (Req 6.3)
+   ------------------------------------------------------------ */
+.balance-display {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+#balance-amount {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+/* ------------------------------------------------------------
+   Form styles
+   ------------------------------------------------------------ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-4);
+}
+
+.form-group label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+input,
+select {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-2) var(--space-3);
+  width: 100%;
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+input::placeholder {
+  color: var(--color-text-muted);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: var(--shadow-focus);
+}
+
+/* ------------------------------------------------------------
+   Submit button
+   ------------------------------------------------------------ */
+button[type="submit"] {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-on-primary);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: var(--space-3) var(--space-6);
+  cursor: pointer;
+  width: 100%;
+  transition: background-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+button[type="submit"]:hover {
+  background-color: var(--color-primary-hover);
+}
+
+button[type="submit"]:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* ============================================================
+   Task 2.3 — Responsive layout & minimum font size (Req 7.3, 7.4)
+   Ensures no horizontal scroll at 320 px and above.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Prevent horizontal overflow at the root level
+   ------------------------------------------------------------ */
+body {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* ------------------------------------------------------------
+   Main column — padding-inline keeps content inside viewport
+   ------------------------------------------------------------ */
+main {
+  padding-inline: var(--space-4);
+  box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------
+   Media elements — never wider than their container
+   ------------------------------------------------------------ */
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ------------------------------------------------------------
+   Form controls — constrain to container width
+   ------------------------------------------------------------ */
+input,
+select,
+button {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------
+   Chart canvas — must not overflow narrow viewports
+   ------------------------------------------------------------ */
+canvas {
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------
+   Narrow-viewport overrides (≤ 480 px)
+   Reduces card padding so content has more horizontal room.
+   ------------------------------------------------------------ */
+@media (max-width: 480px) {
+  #balance-section,
+  #form-section,
+  #list-section,
+  #chart-section {
+    padding: var(--space-4);
+  }
+
+  header {
+    padding: var(--space-4);
+  }
+
+  main {
+    padding-block: var(--space-4);
+  }
+}
+
+/* ============================================================
+   Task 2.4 — Inline field error messages  (Req 1.5, 1.6, 5.4)
+   .error-msg spans are injected below form fields by JS
+   and carry role="alert" for screen-reader announcements.
+   ============================================================ */
+
+.error-msg {
+  display: block;                         /* own line below the field */
+  color: var(--color-error);              /* #ef4444 — red */
+  font-size: var(--font-size-sm);         /* 0.875rem / 14px */
+  margin-top: var(--space-1);             /* 4px gap from the field */
+  line-height: var(--line-height-tight);
+}
+
+/* ============================================================
+   Task 2.5 — Dismissible error banner  (Req 5.5, 5.4)
+   .banner is prepended to <body> (or inside main) by JS;
+   .banner--error applies the error color scheme.
+   ============================================================ */
+
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--border-radius);
+  border: 1px solid transparent;
+  margin-bottom: var(--space-4);
+}
+
+.banner--error {
+  background-color: var(--color-error-bg);     /* #fee2e2 */
+  border-color: var(--color-error-border);     /* #fca5a5 */
+  color: var(--color-error-text);              /* #991b1b */
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Close button inside the banner */
+.banner__close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;                   /* inherits error text color */
+  font-size: var(--font-size-lg);   /* slightly larger hit target */
+  line-height: 1;
+  padding: 0 var(--space-1);
+  transition: opacity var(--transition-fast);
+  max-width: none;                  /* override the global input/button rule */
+}
+
+.banner__close:hover {
+  opacity: 0.7;
+}
+
+.banner__close:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-radius: var(--border-radius-sm);
+}
+
+/* ============================================================
+   Task 2.6 — Transaction list  (Req 2.3, 7.3)
+   #transaction-list is a <ul> rendered by JS.
+   ============================================================ */
+
+#transaction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  max-height: 20rem;               /* ~320px — scrolls beyond this */
+}
+
+/* Individual transaction rows */
+#transaction-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+#transaction-list li:last-child {
+  border-bottom: none;
+}
+
+/* Transaction name — grows to fill available space */
+.transaction-name {
+  flex: 1 1 auto;
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Amount — fixed-width, right-aligned */
+.transaction-amount {
+  flex-shrink: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+/* Category badge */
+.transaction-category {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+/* Delete button inside each row */
+.btn-delete {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  line-height: 1;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+  max-width: none;   /* override global input/button rule */
+}
+
+.btn-delete:hover {
+  background-color: var(--color-error-bg);
+  border-color: var(--color-error-border);
+}
+
+.btn-delete:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* "No transactions yet" placeholder item */
+#transaction-list .placeholder {
+  color: var(--color-text-muted);
+  font-style: italic;
+  font-size: var(--font-size-sm);
+  text-align: center;
+  padding: var(--space-4) 0;
+  border-bottom: none;
+  justify-content: center;
+}

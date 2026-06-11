@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Runner — Expense &amp; Budget Visualizer</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      /* Test runner styles — separate from app styles */
+      #test-output {
+        font-family: monospace;
+        font-size: 14px;
+        padding: 1rem;
+        max-width: 900px;
+        margin: 2rem auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background: #fafafa;
+      }
+      #test-output h2 {
+        margin-top: 0;
+        font-size: 1rem;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 0.5rem;
+      }
+      .test-pass  { color: #1a7f37; }
+      .test-fail  { color: #cf222e; }
+      .test-suite { font-weight: bold; margin-top: 1em; }
+      .test-summary { margin-top: 1em; font-weight: bold; border-top: 1px solid #ccc; padding-top: 0.5rem; }
+    </style>
+
+    <!--
+      Step 1: Stub window.Chart BEFORE app.js loads.
+      initChart() calls `new Chart(...)` on DOMContentLoaded — the stub
+      captures that call so no real canvas rendering happens in tests.
+    -->
+    <script>
+      window.Chart = function ChartStub(canvas, config) {
+        this._canvas  = canvas;
+        this._config  = config;
+        this.data     = config.data || { labels: [], datasets: [{ data: [] }] };
+        this.update   = function () {};
+        this.destroy  = function () {};
+      };
+    </script>
+
+    <!--
+      Step 2: Load fast-check (UMD build — exposes window.fc globally).
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/fast-check@3/lib/fast-check.min.js"></script>
+  </head>
+
+  <body>
+
+    <!--
+      Minimal DOM required by app.js — mirrors the relevant parts of index.html.
+      All IDs that app.js accesses must exist before app.js runs.
+    -->
+
+    <!-- Balance display (renderBalance writes to #balance-amount) -->
+    <span id="balance-amount" style="display:none">$0.00</span>
+
+    <!-- Transaction form (handleFormSubmit / resetForm) -->
+    <form id="transaction-form" novalidate style="display:none">
+      <input type="text"   id="name-input"       name="name"     />
+      <input type="number" id="amount-input"      name="amount"   step="0.01" />
+      <select              id="category-select"   name="category">
+        <option value="" disabled selected>Select</option>
+        <option value="Food">Food</option>
+        <option value="Transport">Transport</option>
+        <option value="Fun">Fun</option>
+      </select>
+      <button type="submit">Add</button>
+    </form>
+
+    <!-- Transaction list (renderTransactionList writes here) -->
+    <ul id="transaction-list" style="display:none"></ul>
+
+    <!-- Chart canvas (initChart attaches Chart instance here) -->
+    <canvas id="expense-chart" style="display:none"></canvas>
+
+    <!-- Test output panel — app.test.js writes results here -->
+    <div id="test-output">
+      <h2>Test Results</h2>
+      <p>Loading tests…</p>
+    </div>
+
+    <!--
+      Step 3: Load app.js (defines all global functions; triggers DOMContentLoaded
+      bootstrap which calls initChart() + initApp() via the stubbed Chart).
+    -->
+    <script src="../js/app.js"></script>
+
+    <!--
+      Step 4: Load the test suite.
+      Runs after app.js so all globals (validateName, computeBalance, etc.) exist.
+    -->
+    <script src="app.test.js"></script>
+
+  </body>
+</html>
